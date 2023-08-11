@@ -22,7 +22,7 @@ request(apiUrl, (error, response, body) => {
   
   const movieData = JSON.parse(body);
   
-  movieData.characters.forEach((characterUrl) => {
+  function fetchCharacter(characterUrl) {
     request(characterUrl, (charError, charResponse, charBody) => {
       if (charError) {
         console.error('Error:', charError);
@@ -36,6 +36,12 @@ request(apiUrl, (error, response, body) => {
       
       const characterData = JSON.parse(charBody);
       console.log(characterData.name);
+      
+      if (movieData.characters.length > 0) {
+        fetchCharacter(movieData.characters.shift());
+      }
     });
-  });
+  }
+  
+  fetchCharacter(movieData.characters.shift());
 });
